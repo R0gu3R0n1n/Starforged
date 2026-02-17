@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starforged V1.2 - Ship Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-panel: #12121a;
+            --bg-input: #1a1a25;
+            --text-primary: #e0e0ff;
+            --text-secondary: #9090b0;
+            --accent-gold: #ffb703;
+            --accent-red: #e63946;
+            --accent-purple: #9d4edd;
+            --accent-green: #2a9d8f;
+            --accent-blue: #4361ee;
+            --accent-orange: #f4a261;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(244, 162, 97, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(67, 97, 238, 0.1) 0%, transparent 50%);
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: var(--bg-panel);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .nav-logo span {
+            color: var(--accent-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-orange);
+            border-color: var(--accent-orange);
+            background: rgba(244, 162, 97, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--accent-orange);
+            border-color: var(--accent-orange);
+            background: rgba(244, 162, 97, 0.15);
+        }
+
+        .sheet-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-panel);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(244, 162, 97, 0.05);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-orange), transparent);
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            position: relative;
+            display: inline-block;
+            padding: 0 20px;
+            background: var(--bg-panel);
+        }
+
+        .game-title span {
+            background: linear-gradient(180deg, var(--accent-orange) 0%, #e76f51 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(244, 162, 97, 0.5);
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: var(--bg-input);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-blue));
+            opacity: 0.6;
+        }
+
+        .panel-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-orange);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-header::before {
+            content: '◆';
+            color: var(--accent-orange);
+        }
+
+        .handbook-link {
+            margin-left: auto;
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+            padding: 2px 8px;
+            border: 1px solid rgba(67, 97, 238, 0.3);
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+
+        .handbook-link:hover {
+            background: rgba(67, 97, 238, 0.2);
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 8px 10px;
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 10px rgba(244, 162, 97, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-blue);
+            opacity: 0.5;
+        }
+
+        .stat-name {
+            font-size: 0.65em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            width: 100%;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            background: transparent;
+            border: none;
+            color: var(--accent-orange);
+            padding: 0;
+        }
+
+        .integrity-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .integrity-section {
+            flex: 1;
+            background: rgba(230, 57, 70, 0.1);
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .integrity-section.current {
+            background: rgba(230, 57, 70, 0.2);
+        }
+
+        .integrity-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            color: var(--accent-red);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .integrity-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            width: 100%;
+            text-align: center;
+            background: transparent;
+            border: none;
+        }
+
+        .shield-box {
+            width: 100px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.2), rgba(67, 97, 238, 0.05));
+            border: 2px solid var(--accent-blue);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .shield-label {
+            font-size: 0.7em;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            letter-spacing: 2px;
+        }
+
+        .shield-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--accent-blue);
+            width: 100%;
+            text-align: center;
+            background: transparent;
+            border: none;
+        }
+
+        .crew-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .crew-slot {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .crew-role {
+            width: 100px;
+            font-size: 0.8em;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .crew-name {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            padding: 4px;
+        }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .system-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .system-status {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-green);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .system-status:hover {
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .system-status.damaged {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 10px rgba(230, 57, 70, 0.5);
+        }
+
+        .system-status.damaged:hover {
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .system-status.offline {
+            background: #333;
+            border-color: #555;
+            box-shadow: none;
+        }
+
+        .system-status.offline:hover {
+            box-shadow: 0 0 10px #555;
+        }
+
+        .system-name {
+            flex: 1;
+            font-size: 0.85em;
+        }
+
+        .cargo-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .cargo-header {
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cargo-row {
+            display: contents;
+        }
+
+        .cargo-row input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 6px;
+            color: var(--text-primary);
+        }
+
+        .weapon-mount {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .weapon-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .weapon-name {
+            font-size: 0.9em;
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+
+        .weapon-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .weapon-stats span {
+            color: var(--accent-gold);
+        }
+
+        .weapon-stats input[type="text"],
+        .weapon-stats input[type="number"] {
+            width: 60px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--accent-gold);
+            text-align: center;
+            padding: 2px;
+        }
+
+        textarea.notes {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .ship-class {
+            background: linear-gradient(135deg, rgba(244, 162, 97, 0.1), rgba(244, 162, 97, 0.05));
+            border: 1px solid rgba(244, 162, 97, 0.3);
+        }
+
+        .ship-class .panel-header {
+            color: var(--accent-orange);
+        }
+
+        .ship-class .panel-header::before {
+            color: var(--accent-orange);
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+            background: rgba(244, 162, 97, 0.1);
+        }
+
+        .action-btn.primary {
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+            background: rgba(244, 162, 97, 0.15);
+        }
+
+        .action-btn.primary:hover {
+            background: rgba(244, 162, 97, 0.25);
+        }
+
+        /* Quirk Selection */
+        .quirk-section {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(244, 162, 97, 0.05);
+            border: 1px solid rgba(244, 162, 97, 0.2);
+            border-radius: 4px;
+        }
+
+        .quirk-title {
+            font-size: 0.75em;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .quirk-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .quirk-item {
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quirk-item:hover {
+            border-color: var(--accent-orange);
+            color: var(--text-primary);
+        }
+
+        .quirk-item.selected {
+            background: rgba(244, 162, 97, 0.2);
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .nav-header { display: none; }
+            .sheet-container {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            input, textarea, select {
+                border: 1px solid #999;
+            }
+            .action-bar { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .game-title {
+                font-size: 1.8em;
+                letter-spacing: 3px;
+            }
+            .weapon-stats {
+                gap: 10px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-link {
+                font-size: 0.7rem;
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-logo"><span>STAR</span>FORGED</div>
+        <div class="nav-links">
+            <a href="00-DECLARATION.html" class="nav-link">Declaration</a>
+            <a href="01-CHARACTER-SHEET.html" class="nav-link">Character</a>
+            <a href="02-PLAYERS-HANDBOOK.pdf" class="nav-link" target="_blank">Handbook</a>
+            <a href="03-SHIP-SHEET.html" class="nav-link active">Ship</a>
+            <a href="04-QUICK-REFERENCE.pdf" class="nav-link" target="_blank">Quick Ref</a>
+        </div>
+    </nav>
+
+    <div class="sheet-container">
+        <div class="header">
+            <div class="game-title"><span>STAR</span>FORGED</div>
+            <div class="subtitle">Ship Sheet — 2677</div>
+        </div>
+        
+        <div class="grid">
+            <!-- Ship Info -->
+            <div class="panel ship-class">
+                <div class="panel-header">Ship Specifications</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ship Name</label>
+                        <input type="text" placeholder="e.g., The Void Drifter">
+                    </div>
+                    <div class="form-group">
+                        <label>Ship Class</label>
+                        <select id="ship-class" onchange="updateShipStats()">
+                            <option value="">Select Class</option>
+                            <option value="corvette">Corvette (Small, Fast)</option>
+                            <option value="frigate">Frigate (Medium, Balanced)</option>
+                            <option value="destroyer">Destroyer (Large, Heavy)</option>
+                            <option value="freighter">Freighter (Cargo, Slow)</option>
+                            <option value="interceptor">Interceptor (Combat, Agile)</option>
+                            <option value="explorer">Explorer (Long-Range, Durable)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Registration</label>
+                        <input type="text" placeholder="e.g., FR-7749-XK">
+                    </div>
+                    <div class="form-group">
+                        <label>Home Port</label>
+                        <input type="text" placeholder="e.g., Station Omega-7">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Manufacturer</label>
+                        <input type="text" placeholder="e.g., Core Systems Shipyards">
+                    </div>
+                    <div class="form-group">
+                        <label>Ship AI</label>
+                        <input type="text" placeholder="e.g., NAVI-Prime">
+                    </div>
+                </div>
+
+                <div class="quirk-section">
+                    <div class="quirk-title">Ship Quirks (Choose 2)</div>
+                    <div class="quirk-list">
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Ghost Signature</div>
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Sentient Core</div>
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Modular Bay</div>
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Jury-Rigged</div>
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Luxury Interior</div>
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Smuggler's Hold</div>
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Overclocked Reactor</div>
+                        <div class="quirk-item" onclick="toggleQuirk(this)">Veteran Scars</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hull & Shields -->
+            <div class="panel">
+                <div class="panel-header">
+                    Hull Integrity & Defense
+                    <a href="02-PLAYERS-HANDBOOK.pdf#page=53" class="handbook-link" target="_blank">HB p.53</a>
+                </div>
+                <div class="integrity-bar">
+                    <div class="integrity-section current">
+                        <div class="integrity-label">Current Hull</div>
+                        <input type="number" class="integrity-value" id="current-hull" value="50">
+                    </div>
+                    <div class="integrity-section">
+                        <div class="integrity-label">Max Hull</div>
+                        <input type="number" class="integrity-value" id="max-hull" value="50">
+                    </div>
+                    <div class="shield-box">
+                        <div class="shield-label">Shields</div>
+                        <input type="number" class="shield-value" id="shields" value="20">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Armor Rating</label>
+                        <input type="number" id="armor-rating" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Evasion Modifier</label>
+                        <input type="number" id="evasion" value="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Damage Threshold</label>
+                        <input type="number" id="threshold" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Shield Regen</label>
+                        <input type="text" value="5/round">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ship Stats -->
+        <div class="panel" style="margin-bottom: 20px;">
+            <div class="panel-header">Ship Performance</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-name">Speed</div>
+                    <input type="number" class="stat-value" id="ship-speed" value="8">
+                </div>
+                <div class="stat-box">
+                    <div class="stat-name">Maneuver</div>
+                    <input type="number" class="stat-value" id="ship-maneuver" value="2">
+                </div>
+                <div class="stat-box">
+                    <div class="stat-name">Sensors</div>
+                    <input type="number" class="stat-value" id="ship-sensors" value="12">
+                </div>
+                <div class="stat-box">
+                    <div class="stat-name">Stealth</div>
+                    <input type="number" class="stat-value" id="ship-stealth" value="10">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>FTL Rating</label>
+                    <input type="text" id="ftl-rating" value="Class C (Short Range)">
+                </div>
+                <div class="form-group">
+                    <label>Range</label>
+                    <input type="text" id="ship-range" value="12 Parsecs">
+                </div>
+                <div class="form-group">
+                    <label>Crew Capacity</label>
+                    <input type="number" id="crew-cap" value="4">
+                </div>
+                <div class="form-group">
+                    <label>Passenger Berths</label>
+                    <input type="number" id="passenger-berths" value="2">
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <!-- Crew -->
+            <div class="panel">
+                <div class="panel-header">Crew Manifest</div>
+                <div class="crew-list">
+                    <div class="crew-slot">
+                        <div class="crew-role">Captain</div>
+                        <input type="text" class="crew-name" placeholder="Character name">
+                    </div>
+                    <div class="crew-slot">
+                        <div class="crew-role">Pilot</div>
+                        <input type="text" class="crew-name" placeholder="Character name">
+                    </div>
+                    <div class="crew-slot">
+                        <div class="crew-role">Engineer</div>
+                        <input type="text" class="crew-name" placeholder="Character name">
+                    </div>
+                    <div class="crew-slot">
+                        <div class="crew-role">Gunner</div>
+                        <input type="text" class="crew-name" placeholder="Character name">
+                    </div>
+                    <div class="crew-slot">
+                        <div class="crew-role">Navigator</div>
+                        <input type="text" class="crew-name" placeholder="Character name">
+                    </div>
+                    <div class="crew-slot">
+                        <div class="crew-role">Medic</div>
+                        <input type="text" class="crew-name" placeholder="Character name">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Systems -->
+            <div class="panel">
+                <div class="panel-header">
+                    Ship Systems Status
+                    <a href="02-PLAYERS-HANDBOOK.pdf#page=53" class="handbook-link" target="_blank">HB p.53</a>
+                </div>
+                <div class="systems-grid">
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">Engines</div>
+                    </div>
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">Shields</div>
+                    </div>
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">Weapons</div>
+                    </div>
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">Sensors</div>
+                    </div>
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">Life Support</div>
+                    </div>
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">FTL Drive</div>
+                    </div>
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">Comms</div>
+                    </div>
+                    <div class="system-item">
+                        <div class="system-status" onclick="cycleSystemStatus(this)"></div>
+                        <div class="system-name">Navigation</div>
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-size: 0.8em; color: var(--text-secondary);">
+                    Click circles to cycle: Green (Operational) → Red (Damaged) → Gray (Offline)
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <!-- Weapons -->
+            <div class="panel">
+                <div class="panel-header">
+                    Weapon Systems
+                    <a href="02-PLAYERS-HANDBOOK.pdf#page=53" class="handbook-link" target="_blank">HB p.53</a>
+                </div>
+                <div class="weapon-mount">
+                    <div class="weapon-header">
+                        <div class="weapon-name">Forward Mount</div>
+                    </div>
+                    <input type="text" placeholder="Weapon name (e.g., Twin Plasma Cannons)" style="width: 100%; margin-bottom: 6px; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--text-primary);">
+                    <div class="weapon-stats">
+                        <div>Damage: <input type="text" value="2d8"></div>
+                        <div>Range: <input type="text" value="Long"></div>
+                        <div>Arc: <span>Forward</span></div>
+                    </div>
+                </div>
+                <div class="weapon-mount">
+                    <div class="weapon-header">
+                        <div class="weapon-name">Turret Mount</div>
+                    </div>
+                    <input type="text" placeholder="Weapon name (e.g., Auto-Laser)" style="width: 100%; margin-bottom: 6px; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--text-primary);">
+                    <div class="weapon-stats">
+                        <div>Damage: <input type="text" value="1d6"></div>
+                        <div>Range: <input type="text" value="Medium"></div>
+                        <div>Arc: <span>360°</span></div>
+                    </div>
+                </div>
+                <div class="weapon-mount">
+                    <div class="weapon-header">
+                        <div class="weapon-name">Missile Bay</div>
+                    </div>
+                    <input type="text" placeholder="Weapon name (e.g., Seeker Missiles)" style="width: 100%; margin-bottom: 6px; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--text-primary);">
+                    <div class="weapon-stats">
+                        <div>Damage: <input type="text" value="3d10"></div>
+                        <div>Ammo: <input type="number" value="6" style="width: 60px;"></div>
+                        <div>Special: <span>Homing</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cargo -->
+            <div class="panel">
+                <div class="panel-header">Cargo Hold</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cargo Capacity</label>
+                        <input type="text" id="cargo-cap" value="50 Tons">
+                    </div>
+                    <div class="form-group">
+                        <label>Current Load</label>
+                        <input type="text" value="23 Tons">
+                    </div>
+                </div>
+                <div class="cargo-grid">
+                    <div class="cargo-header">Item</div>
+                    <div class="cargo-header">Qty</div>
+                    <div class="cargo-header">Value</div>
+                    
+                    <div class="cargo-row">
+                        <input type="text" placeholder="Item name">
+                        <input type="number" placeholder="0">
+                        <input type="text" placeholder="0 CR">
+                    </div>
+                    <div class="cargo-row">
+                        <input type="text" placeholder="Item name">
+                        <input type="number" placeholder="0">
+                        <input type="text" placeholder="0 CR">
+                    </div>
+                    <div class="cargo-row">
+                        <input type="text" placeholder="Item name">
+                        <input type="number" placeholder="0">
+                        <input type="text" placeholder="0 CR">
+                    </div>
+                    <div class="cargo-row">
+                        <input type="text" placeholder="Item name">
+                        <input type="number" placeholder="0">
+                        <input type="text" placeholder="0 CR">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label>Contraband</label>
+                        <input type="text" placeholder="Hidden cargo">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ship Notes -->
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header">Ship Log & Modifications</div>
+            <div class="grid" style="margin: 0;">
+                <div>
+                    <div style="font-size: 0.85em; color: var(--accent-orange); margin-bottom: 8px;">Modifications & Upgrades</div>
+                    <textarea class="notes" placeholder="Engine upgrades, weapon modifications, special features..."></textarea>
+                </div>
+                <div>
+                    <div style="font-size: 0.85em; color: var(--accent-orange); margin-bottom: 8px;">Ship History & Notes</div>
+                    <textarea class="notes" placeholder="Previous owners, notable voyages, debts, faction affiliations..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="action-btn" onclick="window.print()">Print Sheet</button>
+            <button class="action-btn primary" onclick="saveShip()">Save Ship</button>
+            <button class="action-btn" onclick="loadShip()">Load Ship</button>
+            <button class="action-btn" onclick="clearSheet()">Clear Sheet</button>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; font-size: 0.75em; color: var(--text-secondary); letter-spacing: 2px; text-transform: uppercase;">
+            Starforged RPG • Year 2677 • The Ship Is Your Home, The Void Is Your Sea
+        </div>
+    </div>
+    
+    <script>
+        // Ship class templates
+        const shipTemplates = {
+            'corvette': { hull: 40, shields: 15, armor: 4, speed: 12, maneuver: 4, sensors: 10, stealth: 14, crew: 3, cargo: '20 Tons', ftl: 'Class C', range: '10 Parsecs' },
+            'frigate': { hull: 60, shields: 25, armor: 6, speed: 8, maneuver: 2, sensors: 12, stealth: 10, crew: 5, cargo: '50 Tons', ftl: 'Class B', range: '20 Parsecs' },
+            'destroyer': { hull: 100, shields: 40, armor: 10, speed: 6, maneuver: 0, sensors: 14, stealth: 6, crew: 8, cargo: '30 Tons', ftl: 'Class B', range: '25 Parsecs' },
+            'freighter': { hull: 80, shields: 20, armor: 5, speed: 4, maneuver: -2, sensors: 10, stealth: 8, crew: 4, cargo: '200 Tons', ftl: 'Class C', range: '15 Parsecs' },
+            'interceptor': { hull: 30, shields: 12, armor: 3, speed: 14, maneuver: 5, sensors: 12, stealth: 16, crew: 2, cargo: '10 Tons', ftl: 'Class A', range: '8 Parsecs' },
+            'explorer': { hull: 70, shields: 30, armor: 7, speed: 7, maneuver: 1, sensors: 16, stealth: 12, crew: 6, cargo: '80 Tons', ftl: 'Class A', range: '50 Parsecs' }
+        };
+
+        function updateShipStats() {
+            const shipClass = document.getElementById('ship-class').value;
+            if (shipTemplates[shipClass]) {
+                const stats = shipTemplates[shipClass];
+                document.getElementById('max-hull').value = stats.hull;
+                document.getElementById('current-hull').value = stats.hull;
+                document.getElementById('shields').value = stats.shields;
+                document.getElementById('armor-rating').value = stats.armor;
+                document.getElementById('ship-speed').value = stats.speed;
+                document.getElementById('ship-maneuver').value = stats.maneuver;
+                document.getElementById('ship-sensors').value = stats.sensors;
+                document.getElementById('ship-stealth').value = stats.stealth;
+                document.getElementById('crew-cap').value = stats.crew;
+                document.getElementById('cargo-cap').value = stats.cargo;
+                document.getElementById('ftl-rating').value = stats.ftl + ' (' + stats.range + ')';
+                document.getElementById('ship-range').value = stats.range;
+            }
+        }
+
+        function cycleSystemStatus(element) {
+            if (!element.classList.contains('damaged') && !element.classList.contains('offline')) {
+                element.classList.add('damaged');
+            } else if (element.classList.contains('damaged')) {
+                element.classList.remove('damaged');
+                element.classList.add('offline');
+            } else {
+                element.classList.remove('offline');
+            }
+        }
+
+        function toggleQuirk(element) {
+            const selected = document.querySelectorAll('.quirk-item.selected');
+            if (element.classList.contains('selected')) {
+                element.classList.remove('selected');
+            } else if (selected.length < 2) {
+                element.classList.add('selected');
+            }
+        }
+
+        // Save/Load functionality
+        function saveShip() {
+            const data = {
+                name: document.querySelector('input[placeholder="e.g., The Void Drifter"]').value,
+                class: document.getElementById('ship-class').value,
+                registration: document.querySelector('input[placeholder="e.g., FR-7749-XK"]').value,
+                hull: document.getElementById('max-hull').value,
+                shields: document.getElementById('shields').value,
+                quirks: Array.from(document.querySelectorAll('.quirk-item.selected')).map(q => q.textContent),
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('starforged-ship', JSON.stringify(data));
+            alert('Ship saved!');
+        }
+
+        function loadShip() {
+            const saved = localStorage.getItem('starforged-ship');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('ship-class').value = data.class || '';
+                if (data.class) updateShipStats();
+                alert('Ship loaded: ' + (data.name || 'Unnamed Vessel'));
+            } else {
+                alert('No saved ship found.');
+            }
+        }
+
+        function clearSheet() {
+            if (confirm('Clear all ship data?')) {
+                document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
+                document.querySelectorAll('input[type="number"]').forEach(input => input.value = '0');
+                document.querySelectorAll('select').forEach(select => select.value = '');
+                document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+                document.querySelectorAll('.quirk-item').forEach(q => q.classList.remove('selected'));
+                document.querySelectorAll('.system-status').forEach(s => {
+                    s.classList.remove('damaged', 'offline');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

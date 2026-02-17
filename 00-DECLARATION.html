@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starforged V1.2 - The Declaration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void-black: #050508;
+            --deep-space: #0a0a12;
+            --star-gold: #ffb703;
+            --star-gold-dim: #ff8500;
+            --nebula-purple: #9d4edd;
+            --nebula-blue: #4361ee;
+            --alert-red: #e63946;
+            --cosmic-cyan: #2a9d8f;
+            --text-primary: #e0e0ff;
+            --text-secondary: #9090b0;
+            --text-muted: #606080;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void-black);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: var(--opacity);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: var(--opacity); }
+            50% { opacity: calc(var(--opacity) * 0.3); }
+        }
+
+        /* Nebula Effects */
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: nebula-drift 30s ease-in-out infinite;
+        }
+
+        .nebula-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--nebula-purple), transparent);
+            top: -200px;
+            right: -200px;
+        }
+
+        .nebula-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--nebula-blue), transparent);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -10s;
+        }
+
+        .nebula-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--star-gold), transparent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.08;
+            animation-delay: -20s;
+        }
+
+        @keyframes nebula-drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .hero-badge {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 6px;
+            color: var(--star-gold);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fade-in-up 1s ease forwards 0.5s;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fade-in-up 1s ease forwards 0.8s;
+        }
+
+        .hero-title .star {
+            background: linear-gradient(180deg, var(--star-gold) 0%, var(--star-gold-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(255, 183, 3, 0.5);
+            position: relative;
+        }
+
+        .hero-title .forged {
+            color: var(--text-primary);
+            text-shadow: 0 0 40px rgba(224, 224, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 8px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fade-in-up 1s ease forwards 1.1s;
+        }
+
+        .hero-version {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            color: var(--nebula-purple);
+            letter-spacing: 4px;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fade-in-up 1s ease forwards 1.4s;
+        }
+
+        .scroll-indicator {
+            opacity: 0;
+            animation: fade-in-up 1s ease forwards 1.7s;
+        }
+
+        .scroll-text {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-right: 2px solid var(--star-gold);
+            border-bottom: 2px solid var(--star-gold);
+            transform: rotate(45deg);
+            margin: 0 auto;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translate(0, 0); }
+            40% { transform: rotate(45deg) translate(10px, 10px); }
+            60% { transform: rotate(45deg) translate(5px, 5px); }
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Declaration Section */
+        .declaration {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 30px;
+        }
+
+        .preamble {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 40px;
+            border: 1px solid rgba(255, 183, 3, 0.2);
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.05), transparent);
+            position: relative;
+        }
+
+        .preamble::before,
+        .preamble::after {
+            content: '◆';
+            position: absolute;
+            color: var(--star-gold);
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        .preamble::before {
+            top: 15px;
+            left: 15px;
+        }
+
+        .preamble::after {
+            bottom: 15px;
+            right: 15px;
+        }
+
+        .preamble-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 6px;
+            color: var(--star-gold);
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .preamble-text {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .preamble-text p {
+            margin-bottom: 15px;
+        }
+
+        /* Articles */
+        .article {
+            margin-bottom: 60px;
+            padding: 30px;
+            border-left: 3px solid var(--nebula-purple);
+            background: linear-gradient(90deg, rgba(157, 78, 221, 0.05), transparent);
+            transition: all 0.3s ease;
+        }
+
+        .article:hover {
+            border-left-color: var(--star-gold);
+            background: linear-gradient(90deg, rgba(255, 183, 3, 0.08), transparent);
+        }
+
+        .article-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .article-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--nebula-purple);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .article-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .article-content {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            font-size: 1rem;
+        }
+
+        .article-content p {
+            margin-bottom: 15px;
+        }
+
+        .article-list {
+            list-style: none;
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .article-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 10px;
+        }
+
+        .article-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--star-gold);
+        }
+
+        .will-not {
+            color: var(--alert-red);
+        }
+
+        .will {
+            color: var(--cosmic-cyan);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .cta-divider {
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--star-gold), transparent);
+            margin: 0 auto 60px;
+        }
+
+        .cta-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, var(--star-gold), var(--star-gold-dim));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+        }
+
+        .enter-button {
+            display: inline-block;
+            padding: 25px 70px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--void-black);
+            background: linear-gradient(135deg, var(--star-gold), var(--star-gold-dim));
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 40px rgba(255, 183, 3, 0.3);
+        }
+
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .enter-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 60px rgba(255, 183, 3, 0.5);
+        }
+
+        .enter-button:hover::before {
+            left: 100%;
+        }
+
+        .enter-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .footer-year {
+            font-family: 'Orbitron', monospace;
+            color: var(--nebula-purple);
+            margin-top: 10px;
+            letter-spacing: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.85rem;
+                letter-spacing: 4px;
+            }
+
+            .declaration {
+                padding: 60px 20px;
+            }
+
+            .article {
+                padding: 20px;
+            }
+
+            .article-title {
+                font-size: 1rem;
+            }
+
+            .enter-button {
+                padding: 20px 40px;
+                font-size: 1rem;
+            }
+
+            .preamble {
+                padding: 25px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .starfield, .nebula {
+                display: none;
+            }
+
+            .enter-button {
+                display: none;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            .article {
+                border-left: 2px solid #333;
+                background: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Starfield Background -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Nebula Effects -->
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+
+    <div class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">Player Package V1.2</div>
+            <h1 class="hero-title">
+                <span class="star">STAR</span><span class="forged">FORGED</span>
+            </h1>
+            <p class="hero-subtitle">A Declaration for V1.2 and Beyond</p>
+            <div class="hero-version">Release Date: March 31st, 2026</div>
+            <div class="scroll-indicator">
+                <p class="scroll-text">Scroll to Read</p>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- Declaration Content -->
+        <section class="declaration">
+            <div class="preamble">
+                <h2 class="preamble-title">Preamble</h2>
+                <div class="preamble-text">
+                    <p>We are living through a golden age of tabletop roleplaying—and a crowded one. Every month brings new systems, new settings, new Kickstarters promising to revolutionize the hobby. Most cost $30, $50, $100 to even try. Many disappear. Players hesitate. GMs commit to "one more campaign" of the game everyone already knows.</p>
+                    <p>This is not a criticism. Making games is hard. Paying rent is harder.</p>
+                    <p><strong>But we choose a different path.</strong></p>
+                </div>
+            </div>
+
+            <article class="article">
+                <div class="article-header">
+                    <span class="article-number">Article I</span>
+                    <h3 class="article-title">The Core Rules Are Free</h3>
+                </div>
+                <div class="article-content">
+                    <p>The complete Starforged V1.2 Player's Handbook—every rule, every class, every archetype, every faction—will always be available at no cost. PDF. Web. Print-at-home. No "basic rules" vs. "core rules." No "free trial." No expiration date.</p>
+                    <p><strong>If you have a device that can read this, you can play Starforged.</strong></p>
+                </div>
+            </article>
+
+            <article class="article">
+                <div class="article-header">
+                    <span class="article-number">Article II</span>
+                    <h3 class="article-title">Free Means Free</h3>
+                </div>
+                <div class="article-content">
+                    <p class="will-not"><strong>We will not:</strong></p>
+                    <ul class="article-list will-not">
+                        <li>Gate character options behind paywalls</li>
+                        <li>Release "essential" supplements that fix the free rules</li>
+                        <li>Use "free" as a funnel to extract money through dark patterns</li>
+                        <li>Sell your data to fund the game</li>
+                        <li>Show you ads to "subsidize" your experience</li>
+                    </ul>
+                    <p class="will"><strong>We will:</strong></p>
+                    <ul class="article-list will">
+                        <li>Offer premium physical products for those who want them</li>
+                        <li>Release expanded content as optional purchases</li>
+                        <li>Accept direct support through Patreon or tips</li>
+                        <li>Partner with platforms that respect your privacy</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="article">
+                <div class="article-header">
+                    <span class="article-number">Article III</span>
+                    <h3 class="article-title">Access Is A Feature</h3>
+                </div>
+                <div class="article-content">
+                    <p>A free game is not a lesser game. It is a more accessible game.</p>
+                    <ul class="article-list">
+                        <li>A teenager with no disposable income can run a campaign for their friends</li>
+                        <li>A curious 5e player can try sci-fi without a $60 gamble</li>
+                        <li>A library can print copies for their community</li>
+                        <li>A school club can learn collaborative storytelling</li>
+                        <li>A solo player can explore the void on a Tuesday night without justification</li>
+                    </ul>
+                    <p><strong>Every barrier removed is a story gained.</strong></p>
+                </div>
+            </article>
+
+            <article class="article">
+                <div class="article-header">
+                    <span class="article-number">Article IV</span>
+                    <h3 class="article-title">Community Is The Currency</h3>
+                </div>
+                <div class="article-content">
+                    <p>If you cannot pay with money, pay with participation:</p>
+                    <ul class="article-list">
+                        <li><strong>Play the game.</strong> Roll dice. Make choices. Let the Infamy system surprise you.</li>
+                        <li><strong>Tell the story.</strong> Post actual play reports. Record sessions. Write fiction.</li>
+                        <li><strong>Build the world.</strong> Create homebrew factions, archetypes, planets. Share them.</li>
+                        <li><strong>Welcome newcomers.</strong> Answer questions. Run intro sessions. Be the guide you wish you had.</li>
+                        <li><strong>Speak honestly.</strong> Review us. Criticize us. Help us improve V1.3.</li>
+                    </ul>
+                    <p>The value of Starforged is not in its PDF. It is in the thousand crews navigating the void, the legends they forge, and the community that remembers them.</p>
+                </div>
+            </article>
+
+            <article class="article">
+                <div class="article-header">
+                    <span class="article-number">Article V</span>
+                    <h3 class="article-title">Transparency In Sustainability</h3>
+                </div>
+                <div class="article-content">
+                    <p>We will always explain how this project survives:</p>
+                    <ul class="article-list">
+                        <li>Physical sales fund art, layout, and printing costs</li>
+                        <li>Optional supplements (setting guides, campaign frameworks, VTT modules) compensate contributors</li>
+                        <li>Direct support (Patreon, Ko-fi) funds ongoing development and community events</li>
+                        <li>Licensing (for third-party commercial use) ensures the ecosystem grows</li>
+                    </ul>
+                    <p>We commit to annual financial transparency reports. If the model fails, we will say so. If we change course, we will explain why.</p>
+                </div>
+            </article>
+
+            <article class="article">
+                <div class="article-header">
+                    <span class="article-number">Article VI</span>
+                    <h3 class="article-title">The Void Belongs To You</h3>
+                </div>
+                <div class="article-content">
+                    <p>Starforged is released under a Creative Commons license. You may:</p>
+                    <ul class="article-list">
+                        <li>Remix the rules for your own game</li>
+                        <li>Publish and sell your own Starforged content</li>
+                        <li>Translate the game into other languages</li>
+                        <li>Port the setting to other systems</li>
+                    </ul>
+                    <p>We only ask that you credit the original, share alike, and do not use our logos to imply official endorsement without permission.</p>
+                    <p><strong>The Great Disconnection broke the galaxy's central control. We see no reason to impose our own.</strong></p>
+                </div>
+            </article>
+
+            <article class="article">
+                <div class="article-header">
+                    <span class="article-number">Article VII</span>
+                    <h3 class="article-title">Forever Is A Promise</h3>
+                </div>
+                <div class="article-content">
+                    <p>We cannot predict the future. Markets shift. Teams dissolve. But we make this commitment:</p>
+                    <p>As long as Starforged exists in any form, the V1.2 core rules will remain free. If the current stewards can no longer maintain it, we will transfer ownership to the community or archive it with a permanent open license.</p>
+                    <p><strong>This manifesto is not legally binding. It is morally binding. We stake our reputation—our Infamy—upon it.</strong></p>
+                </div>
+            </article>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-divider"></div>
+            <h2 class="cta-title">The Forge Awaits</h2>
+            <p class="cta-subtitle">Your journey among the stars begins now</p>
+            <a href="01-CHARACTER-SHEET.html" class="enter-button">Enter The Forge</a>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">Starforged RPG Player Package V1.2</p>
+            <p class="footer-year">Year 2677</p>
+        </footer>
+    </div>
+
+    <script>
+        // Generate starfield
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            const starCount = 150;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+
+                const size = Math.random() * 2 + 1;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = Math.random() * 3 + 2;
+                const opacity = Math.random() * 0.7 + 0.3;
+
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.setProperty('--opacity', opacity);
+
+                starfield.appendChild(star);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', createStarfield);
+    </script>
+</body>
+</html>
